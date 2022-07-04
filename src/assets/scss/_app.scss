@@ -1,0 +1,16 @@
+/*  ---- header ----- */
+@import '../../components/header/header';
+
+
+/*  ---- navigation ---- */
+@import '../../components/sideBar/sideBar';
+
+// ---- details pages --- 
+@import '../../components/details/details';
+
+
+//  ---- home page ----
+@import '../../pages/homePage';
+
+// --- our store ----
+@import '../../components/ourStore/ourStore';
