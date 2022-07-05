@@ -15,6 +15,7 @@ const App = () => {
             <p>Chinh sua them ti nua ne</p>
             <p>Chinh sua them ti nua ne</p>
             <p>Chinh sua them ti nua ne</p>
+            <p>Chinh sua them ti nua ne</p>
           </MainPage>
     </Frame>
   );
