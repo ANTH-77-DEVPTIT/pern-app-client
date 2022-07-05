@@ -1,12 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './assets/scss/index.scss'
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./assets/scss/index.scss";
+import App from "./App";
+import { AppProvider } from "@shopify/polaris";
+import { BrowserRouter as Router } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+      <AppProvider>
+        <Router>
+            <App />
+        </Router>
+      </AppProvider>
   </React.StrictMode>
 );
-

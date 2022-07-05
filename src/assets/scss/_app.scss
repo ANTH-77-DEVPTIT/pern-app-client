@@ -1,16 +1,18 @@
 /*  ---- header ----- */
-@import '../../components/header/header';
-
+// @import '../../components/header/header';
 
 /*  ---- navigation ---- */
-@import '../../components/sideBar/sideBar';
+// @import '../../components/sideBar/sideBar';
 
 // ---- details pages --- 
-@import '../../components/details/details';
-
+// @import '../../components/details/details';
 
 //  ---- home page ----
-@import '../../pages/homePage';
+// @import '../../pages/homePage';
 
 // --- our store ----
-@import '../../components/ourStore/ourStore';
+// @import '../../components/ourStore/ourStore';
+
+// ----Modal ----
+// @import url("../../components/common/Modal/_modal.scss");
+// @import "../../components/common/Modal/modal"

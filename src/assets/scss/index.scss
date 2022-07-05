@@ -35,4 +35,6 @@
 }
 
 
-@import './app'
+// @import "@shopify/polaris-tokens/dist/css/styles.css";
+@import '@shopify/polaris/build/esm/styles.css';
+@import './app';
