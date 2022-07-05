@@ -5,20 +5,17 @@ import Topbar from "./components/topBar/Topbar";
 import MainPage from "./pages/MainPage";
 
 const App = () => {
-  return (
-    <Frame>
-          <Topbar />
-          <SideBar />
-          <MainPage>
-            <div>Products Management</div>
-            <p>duong thuong dau day ai nhan gian.</p>
-            <p>Chinh sua them ti nua ne</p>
-            <p>Chinh sua them ti nua ne</p>
-            <p>Chinh sua them ti nua ne</p>
-            <p>Chinh sua them ti nua ne</p>
-          </MainPage>
-    </Frame>
-  );
+    return (
+        <Frame>
+            <Layout>
+                <Topbar />
+                <SideBar />
+            </Layout>
+            <MainPage>
+                <div>Products Management</div>
+            </MainPage>
+        </Frame>
+    );
 };
 
 export default App;
