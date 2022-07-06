@@ -1,69 +1,91 @@
 import {
-  IndexTable,
-  TextStyle,
-  Card,
-  useIndexResourceState,
+    IndexTable,
+    TextStyle,
+    Card,
+    useIndexResourceState,
+    Stack,
+    ButtonGroup,
+    Button,
 } from "@shopify/polaris";
+import { DeleteMajor, EditMajor } from "@shopify/polaris-icons";
 import React from "react";
 
-const ProductItem = ({ products }) => {
-  const resourceName = {
-    singular: "product",
-    plural: "products",
-  };
+const ProductItem = ({ products, isOpen, isSubmitting }) => {
+    //lay ra duoc isOpen, isSubbmitting thi truyen no vao cho button Delete. de quan ly chung Modal voi Create Product
+    const resourceName = {
+        singular: "product",
+        plural: "products",
+    };
 
+    const { selectedResources, allResourcesSelected, handleSelectionChange } =
+        useIndexResourceState(products);
 
-  const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(products);
+    const rowMarkup = products.map((product) => {
+        return (
+            <IndexTable.Row
+                id={product.id}
+                key={product.id}
+                selected={selectedResources.includes(product.id)}
+                position={product.index}
+            >
+                <IndexTable.Cell>
+                    <TextStyle variation="strong">{product.id}</TextStyle>
+                </IndexTable.Cell>
+                <IndexTable.Cell>{product.title}</IndexTable.Cell>
+                <IndexTable.Cell>
+                    <img
+                        style={{ width: "auto", height: "40px" }}
+                        src={`http://localhost:5000${product.images[0]}`}
+                        alt="An ne"
+                    />
+                </IndexTable.Cell>
+                <IndexTable.Cell>{product.description}</IndexTable.Cell>
+                <IndexTable.Cell>{product.price}</IndexTable.Cell>
+                <IndexTable.Cell>{product?.Brand?.name}</IndexTable.Cell>
+                <IndexTable.Cell>
+                    <Stack>
+                        <ButtonGroup>
+                            <Button
+                                accessibilityLabel="Terms and conditions (opens a new window)"
+                                icon={EditMajor}
+                                external
+                            ></Button>
+                            <Button
+                                primary
+                                accessibilityLabel="Terms and conditions (opens a new window)"
+                                icon={DeleteMajor}
+                                external
+                            ></Button>
+                        </ButtonGroup>
+                    </Stack>
+                </IndexTable.Cell>
+            </IndexTable.Row>
+        );
+    });
 
-  const rowMarkup = products.map((product) => {
     return (
-      <IndexTable.Row
-        id={product.id}
-        key={product.id}
-        selected={selectedResources.includes(product.id)}
-        position={product.index}
-      >
-        <IndexTable.Cell>
-          <TextStyle variation="strong">{product.id}</TextStyle>
-        </IndexTable.Cell>
-        <IndexTable.Cell>{product.title}</IndexTable.Cell>
-        <IndexTable.Cell>
-          <img
-            style={{ width: "auto", height: "40px" }}
-            src={`http://localhost:5000${product.images[0]}`}
-            alt="An ne"
-          />
-        </IndexTable.Cell>
-        <IndexTable.Cell>{product.description}</IndexTable.Cell>
-        <IndexTable.Cell>{product.price}</IndexTable.Cell>
-        <IndexTable.Cell>{product?.Brand?.name}</IndexTable.Cell>
-      </IndexTable.Row>
+        <Card>
+            <IndexTable
+                resourceName={resourceName}
+                itemCount={products.length}
+                selectedItemsCount={
+                    allResourcesSelected ? "All" : selectedResources.length
+                }
+                onSelectionChange={handleSelectionChange}
+                headings={[
+                    { title: "ID" },
+                    { title: "Title" },
+                    { title: "Images" },
+                    { title: "Description" },
+                    { title: "Price" },
+                    { title: "Brand" },
+                    { title: "" },
+                ]}
+            >
+                {rowMarkup}
+            </IndexTable>
+        </Card>
     );
-  });
-
-  return (
-    <Card>
-      <IndexTable
-        resourceName={resourceName}
-        itemCount={products.length}
-        selectedItemsCount={
-          allResourcesSelected ? "All" : selectedResources.length
-        }
-        onSelectionChange={handleSelectionChange}
-        headings={[
-          { title: "ID" },
-          { title: "Title" },
-          { title: "Images" },
-          { title: "Description" },
-          { title: "Price" },
-          { title: "Brand" },
-        ]}
-      >
-        {rowMarkup}
-      </IndexTable>
-    </Card>
-  );
 };
 
 export default ProductItem;
