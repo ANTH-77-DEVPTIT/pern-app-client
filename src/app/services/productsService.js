@@ -14,7 +14,7 @@ const ProductAPI = () => {
     }, []);
 
     return {
-        products,
+        products: [products],
     };
 };
 

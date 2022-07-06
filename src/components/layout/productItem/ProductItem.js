@@ -8,6 +8,7 @@ import {
     Button,
 } from "@shopify/polaris";
 import { DeleteMajor, EditMajor } from "@shopify/polaris-icons";
+import axios from "axios";
 import React from "react";
 
 const ProductItem = ({ products, isOpen, isSubmitting }) => {
@@ -20,6 +21,14 @@ const ProductItem = ({ products, isOpen, isSubmitting }) => {
     const { selectedResources, allResourcesSelected, handleSelectionChange } =
         useIndexResourceState(products);
 
+    const handleDeleteProducts = async (idProduct) => {
+        if (idProduct) {
+            const res = await axios.delete(
+                `http://localhost:5000/api/v1/products/${idProduct}`
+            );
+            alert("Delete Product Successfully");
+        }
+    };
     const rowMarkup = products.map((product) => {
         return (
             <IndexTable.Row
@@ -34,7 +43,11 @@ const ProductItem = ({ products, isOpen, isSubmitting }) => {
                 <IndexTable.Cell>{product.title}</IndexTable.Cell>
                 <IndexTable.Cell>
                     <img
-                        style={{ width: "auto", height: "40px" }}
+                        style={{
+                            width: "auto",
+                            height: "40px",
+                            borderRadius: "5px",
+                        }}
                         src={`http://localhost:5000${product.images[0]}`}
                         alt="An ne"
                     />
@@ -55,6 +68,7 @@ const ProductItem = ({ products, isOpen, isSubmitting }) => {
                                 accessibilityLabel="Terms and conditions (opens a new window)"
                                 icon={DeleteMajor}
                                 external
+                                onClick={() => handleDeleteProducts(product.id)}
                             ></Button>
                         </ButtonGroup>
                     </Stack>
