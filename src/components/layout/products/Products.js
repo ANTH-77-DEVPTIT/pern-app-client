@@ -1,17 +1,24 @@
-import React from "react";
-import Header from "../header/Header";
-import Nav from "../navigation/Navigation";
+import React, { useEffect, useState } from "react";
+import { Page } from "@shopify/polaris";
+import { useContext } from "react";
+import { PlusMinor } from "@shopify/polaris-icons";
+import ProductItem from "../productItem/ProductItem";
+import { GlobalState } from "../../../GlobalState";
 
 const Products = () => {
-    return (
-        <div>
-            <Header />
-            <div>
-                <Nav />
-                <p>Products management</p>
-            </div>
-        </div>
-    );
+  const state = useContext(GlobalState)
+  const [products] = state.productsAPI.products
+
+  return (
+    <Page
+      fullWidth
+      title="Products"
+      primaryAction={{ content: "Create Product", icon: PlusMinor }}
+      secondaryActions={[{ content: "Export" }]}
+    >
+      <ProductItem products={products} />
+    </Page>
+  );
 };
 
 export default Products;
