@@ -1,16 +1,33 @@
 import React, { useState } from "react";
-import { Page } from "@shopify/polaris";
+import { Modal, Page } from "@shopify/polaris";
 import { useContext } from "react";
 import { PlusMinor } from "@shopify/polaris-icons";
 import ProductItem from "../productItem/ProductItem";
 import { GlobalState } from "../../../GlobalState";
+import ModalForm from "../modal/Modal";
 
 const Products = () => {
-    //tao vai cai bien isopen form ne, inSubmitting cho phep submit ne.
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const state = useContext(GlobalState);
+
     const [products] = state.productsAPI.products;
+
+    const [mode, setMode] = useState({
+        mode: "create",
+        data: "",
+    });
+
+    const openModalCreate = () => {
+        setMode({
+            mode: "create",
+            data: "",
+        });
+
+        setIsOpen(true);
+    };
 
     return (
         <Page
@@ -19,7 +36,7 @@ const Products = () => {
             primaryAction={{
                 content: "Create Product",
                 icon: PlusMinor,
-                onAction: () => alert("There's no one at all!!"),
+                onAction: () => openModalCreate(),
             }}
             secondaryActions={[
                 {
@@ -35,8 +52,24 @@ const Products = () => {
             <ProductItem
                 products={products}
                 isOpen={isOpen}
+                isOpenModalCreate={isOpenModalCreate}
+                setIsOpen={setIsOpen}
                 isSubmitting={isSubmitting}
+                setIsSubmitting={setIsSubmitting}
+                mode={mode}
+                setMode={setMode}
             />
+
+            {mode.mode === "create" && (
+                <ModalForm
+                    isOpen={isOpen}
+                    isOpenModalCreate={isOpenModalCreate}
+                    setIsOpen={setIsOpen}
+                    isSubmitting={isSubmitting}
+                    setIsSubmitting={setIsSubmitting}
+                    productCreate={mode}
+                />
+            )}
         </Page>
     );
 };
