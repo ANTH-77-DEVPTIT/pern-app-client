@@ -24,6 +24,8 @@ const ModalForm = ({
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState();
     const [brand, setBrand] = useState("dior");
+    const [files, setFiles] = useState([]);
+    // console.log(files);
 
     const handleChange = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
@@ -53,6 +55,17 @@ const ModalForm = ({
         );
 
         setIsOpen(false);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        //cho nay get het dvalue ta va dua vao bien data
+        // if(title && description && price ) {
+        // }
+    };
+
+    const handleSubmitForm = () => {
+        // lay data tu phia tren va dua ve phia backend
     };
 
     return (
@@ -148,7 +161,7 @@ const ModalForm = ({
                     title="Create Product"
                     primaryAction={{
                         content: "Save",
-                        onAction: handleChange,
+                        onAction: () => handleSubmitForm(),
                     }}
                     secondaryActions={[
                         {
@@ -158,7 +171,7 @@ const ModalForm = ({
                     ]}
                 >
                     <Modal.Section>
-                        <Form>
+                        <Form onSubmit={handleSubmit}>
                             <FormLayout>
                                 <TextField
                                     value={title}
@@ -166,12 +179,14 @@ const ModalForm = ({
                                     placeholder="Enter Title here"
                                     onChange={handleChangeTitle}
                                 />
+
                                 <TextField
                                     value={description}
                                     label="Description"
                                     placeholder="Enter Description here"
                                     onChange={handleChangeDescription}
                                 />
+
                                 <TextField
                                     type="number"
                                     value={price}
@@ -187,7 +202,7 @@ const ModalForm = ({
                                     value={brand}
                                 />
 
-                                <UploadFileds />
+                                <UploadFileds images={setFiles} />
                             </FormLayout>
                         </Form>
                     </Modal.Section>
