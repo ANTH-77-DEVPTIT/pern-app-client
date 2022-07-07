@@ -8,19 +8,10 @@ import {
     Button,
 } from "@shopify/polaris";
 import { DeleteMajor, EditMajor } from "@shopify/polaris-icons";
-import React, { useState } from "react";
+import React from "react";
 import ModalForm from "../modal/Modal";
 
-const ProductItem = ({
-    isOpen,
-    setIsOpen,
-    products,
-    isSubmitting,
-    setIsSubmitting,
-    mode,
-    setMode,
-}) => {
-    //lay ra duoc isOpen, isSubbmitting thi truyen no vao cho button Delete. de quan ly chung Modal voi Create Product
+const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
     const resourceName = {
         singular: "product",
         plural: "products",
@@ -49,13 +40,13 @@ const ProductItem = ({
         setIsOpen(true);
     };
 
-    const rowMarkup = products?.map((product) => {
+    const rowMarkup = products?.map((product, index) => {
         return (
             <IndexTable.Row
                 id={product.id}
-                key={product.id}
+                key={index}
                 selected={selectedResources.includes(product.id)}
-                position={product.index}
+                position={index}
             >
                 <IndexTable.Cell>
                     <TextStyle variation="strong">{product.id}</TextStyle>
@@ -67,7 +58,7 @@ const ProductItem = ({
                             height: "40px",
                             borderRadius: "5px",
                         }}
-                        src={`http://localhost:5000${product.images[0]}`}
+                        src={`http://localhost:5000${product?.images[0]}`}
                         alt="An ne"
                     />
                 </IndexTable.Cell>
@@ -123,8 +114,6 @@ const ProductItem = ({
                 <ModalForm
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
-                    isSubmitting={setIsSubmitting}
-                    setIsSubmitting={setIsSubmitting}
                     productDelete={mode}
                 />
             )}
@@ -132,8 +121,6 @@ const ProductItem = ({
                 <ModalForm
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
-                    isSubmitting={isSubmitting}
-                    setIsSubmitting={setIsSubmitting}
                     productEdit={mode}
                 />
             )}

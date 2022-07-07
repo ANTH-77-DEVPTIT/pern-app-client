@@ -1,4 +1,6 @@
 import {
+    Button,
+    ButtonGroup,
     Form,
     FormLayout,
     Modal,
@@ -7,25 +9,23 @@ import {
     TextField,
 } from "@shopify/polaris";
 import axios from "axios";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import UploadFileds from "../uploadFileds/UploadFileds";
 
 const ModalForm = ({
     isOpen,
     setIsOpen,
-    isSubmitting,
-    setIsSubmitting,
     productDelete,
     productEdit,
     productCreate,
+    onSubmit,
 }) => {
     // const [active, setActive] = useState(true);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState();
-    const [brand, setBrand] = useState("dior");
+    const [brandId, setBrandId] = useState(1);
     const [files, setFiles] = useState([]);
-    // console.log(files);
 
     const handleChange = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
@@ -47,7 +47,7 @@ const ModalForm = ({
         { label: "Ferari", value: "3" },
     ];
 
-    const handleChangeBrand = useCallback((value) => setBrand(value), []);
+    const handleChangeBrand = useCallback((value) => setBrandId(value), []);
 
     const handleDeleteProduct = async (productDelete) => {
         await axios.delete(
@@ -57,15 +57,26 @@ const ModalForm = ({
         setIsOpen(false);
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        //cho nay get het dvalue ta va dua vao bien data
-        // if(title && description && price ) {
-        // }
-    };
+    //kiem tra xem co thang nao dang null khong?
+    // useEffect(() => {
+    //     if (title && description && price.length > 0) {
+    //         setIsAllowSubmitting(true);
+    //         return;
+    //     }
+    //     setIsAllowSubmitting(false);
+    // }, [title, description, price]);
 
-    const handleSubmitForm = () => {
+    const handleSubmitForm = (event) => {
         // lay data tu phia tren va dua ve phia backend
+        event.preventDefault();
+        let dataProduct = {
+            title,
+            description,
+            price,
+            brandId,
+            files,
+        };
+        onSubmit(dataProduct);
     };
 
     return (
@@ -159,19 +170,19 @@ const ModalForm = ({
                     open={isOpen}
                     onClose={handleChange}
                     title="Create Product"
-                    primaryAction={{
-                        content: "Save",
-                        onAction: () => handleSubmitForm(),
-                    }}
-                    secondaryActions={[
-                        {
-                            content: "Cancel",
-                            onAction: handleChange,
-                        },
-                    ]}
+                    // primaryAction={{
+                    //     content: "Save",
+                    //     onAction: handleChange,
+                    // }}
+                    // secondaryActions={[
+                    //     {
+                    //         content: "Cancel",
+                    //         onAction: handleChange,
+                    //     },
+                    // ]}
                 >
                     <Modal.Section>
-                        <Form onSubmit={handleSubmit}>
+                        <Form onSubmit={handleSubmitForm}>
                             <FormLayout>
                                 <TextField
                                     value={title}
@@ -199,10 +210,16 @@ const ModalForm = ({
                                     label="Choose Brand"
                                     options={options}
                                     onChange={handleChangeBrand}
-                                    value={brand}
+                                    value={brandId}
                                 />
 
                                 <UploadFileds images={setFiles} />
+                                <ButtonGroup>
+                                    <Button>Cancel</Button>
+                                    <Button submit primary>
+                                        Submit
+                                    </Button>
+                                </ButtonGroup>
                             </FormLayout>
                         </Form>
                     </Modal.Section>

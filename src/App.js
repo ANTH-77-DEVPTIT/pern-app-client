@@ -26,7 +26,7 @@ import {
     AddProductMajor,
 } from "@shopify/polaris-icons";
 import { useState, useCallback, useRef } from "react";
-import Products from "./components/layout/products/Products";
+import ProductList from "./components/layout/productList/ProductList";
 
 const App = () => {
     const defaultState = useRef({
@@ -349,7 +349,7 @@ const App = () => {
           {pageMarkup}
           {toastMarkup}
           {modalMarkup} */}
-                    <Products />
+                    <ProductList />
                 </Frame>
             </AppProvider>
         </div>

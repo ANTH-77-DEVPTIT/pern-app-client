@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Modal, Page } from "@shopify/polaris";
+import { Page } from "@shopify/polaris";
 import { useContext } from "react";
 import { PlusMinor } from "@shopify/polaris-icons";
 import ProductItem from "../productItem/ProductItem";
 import { GlobalState } from "../../../GlobalState";
 import ModalForm from "../modal/Modal";
+import axios from "axios";
 
-const Products = () => {
+const ProductList = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const state = useContext(GlobalState);
 
@@ -27,6 +26,19 @@ const Products = () => {
         });
 
         setIsOpen(true);
+    };
+
+    const handleCreateProduct = async (dataProduct) => {
+        // try {
+        //     const response = await axios.post(
+        //         "http://localhost:5000/api/v1/products",
+        //         dataProduct
+        //     );
+        //     return response;
+        // } catch (error) {
+        //     throw error;
+        // }
+        console.log(dataProduct);
     };
 
     return (
@@ -52,10 +64,7 @@ const Products = () => {
             <ProductItem
                 products={products}
                 isOpen={isOpen}
-                isOpenModalCreate={isOpenModalCreate}
                 setIsOpen={setIsOpen}
-                isSubmitting={isSubmitting}
-                setIsSubmitting={setIsSubmitting}
                 mode={mode}
                 setMode={setMode}
             />
@@ -63,15 +72,13 @@ const Products = () => {
             {mode.mode === "create" && (
                 <ModalForm
                     isOpen={isOpen}
-                    isOpenModalCreate={isOpenModalCreate}
                     setIsOpen={setIsOpen}
-                    isSubmitting={isSubmitting}
-                    setIsSubmitting={setIsSubmitting}
                     productCreate={mode}
+                    onSubmit={handleCreateProduct}
                 />
             )}
         </Page>
     );
 };
 
-export default Products;
+export default ProductList;
