@@ -9,6 +9,7 @@ import axios from "axios";
 
 const ProductList = () => {
     const [isOpen, setIsOpen] = useState(false);
+    // const [productData, setProductData] = useState([]);
 
     const state = useContext(GlobalState);
 
@@ -29,16 +30,44 @@ const ProductList = () => {
     };
 
     const handleCreateProduct = async (dataProduct) => {
-        // try {
-        //     const response = await axios.post(
-        //         "http://localhost:5000/api/v1/products",
-        //         dataProduct
-        //     );
-        //     return response;
-        // } catch (error) {
-        //     throw error;
-        // }
-        console.log(dataProduct);
+        try {
+            console.log(dataProduct);
+            const formData = new FormData();
+
+            formData.append("title", dataProduct.title);
+            formData.append("description", dataProduct.description);
+            formData.append("price", dataProduct.price);
+            formData.append("brandId", dataProduct.brandId);
+            for (let i = 0; i < dataProduct.images.length; i++) {
+                formData.append("images", dataProduct.images[i]);
+            }
+
+            const response = await axios.post(
+                "http://localhost:5000/api/v1/products",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const handleDeleteProduct = async (productDataEdit) => {
+        try {
+            await axios.delete(
+                `http://localhost:5000/api/v1/products/${productDataEdit.data.id}`
+            );
+        } catch (error) {}
+    };
+
+    const handleEditProduct = (dataProductEdit) => {
+        console.log(dataProductEdit);
     };
 
     return (
@@ -67,6 +96,8 @@ const ProductList = () => {
                 setIsOpen={setIsOpen}
                 mode={mode}
                 setMode={setMode}
+                onDelete={handleDeleteProduct}
+                onEdit={handleEditProduct}
             />
 
             {mode.mode === "create" && (

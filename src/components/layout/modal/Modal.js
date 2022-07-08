@@ -8,7 +8,6 @@ import {
     TextContainer,
     TextField,
 } from "@shopify/polaris";
-import axios from "axios";
 import { useState, useCallback, useEffect } from "react";
 import UploadFileds from "../uploadFileds/UploadFileds";
 
@@ -19,13 +18,16 @@ const ModalForm = ({
     productEdit,
     productCreate,
     onSubmit,
+    onDelete,
+    onEdit,
 }) => {
-    // const [active, setActive] = useState(true);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState();
     const [brandId, setBrandId] = useState(1);
-    const [files, setFiles] = useState([]);
+    const [images, setImages] = useState([]);
+
+    console.log(images);
 
     const handleChange = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
@@ -50,33 +52,43 @@ const ModalForm = ({
     const handleChangeBrand = useCallback((value) => setBrandId(value), []);
 
     const handleDeleteProduct = async (productDelete) => {
-        await axios.delete(
-            `http://localhost:5000/api/v1/products/${productDelete.data.id}`
-        );
-
+        onDelete(productDelete);
         setIsOpen(false);
     };
 
-    //kiem tra xem co thang nao dang null khong?
-    // useEffect(() => {
-    //     if (title && description && price.length > 0) {
-    //         setIsAllowSubmitting(true);
-    //         return;
-    //     }
-    //     setIsAllowSubmitting(false);
-    // }, [title, description, price]);
+    useEffect(() => {
+        if (productEdit?.mode === "edit") {
+            return (
+                setTitle(productEdit.data.title),
+                setDescription(productEdit.data.description),
+                setPrice(productEdit.data.price)
+            );
+        }
+    }, [productEdit]);
 
     const handleSubmitForm = (event) => {
-        // lay data tu phia tren va dua ve phia backend
+        //create form data o day lay ra du lieu oke thu gui len tren
         event.preventDefault();
         let dataProduct = {
             title,
             description,
             price,
             brandId,
-            files,
+            images,
         };
+
         onSubmit(dataProduct);
+    };
+
+    const handleFormEditProduct = (event) => {
+        event.preventDefault();
+        let dataProductEdit = {
+            title,
+            description,
+            price,
+            brandId,
+        };
+        onEdit(dataProductEdit);
     };
 
     return (
@@ -110,54 +122,58 @@ const ModalForm = ({
                 </div>
             )}
 
+            {/* setTitle(productEdit.data.title),
+            setDescription(productEdit.data.description),
+            setPrice(productEdit.data.price),
+            setImages(productEdit.data.title), */}
+
             {productEdit?.mode === "edit" && (
                 <Modal
                     // activator={activator}
                     open={isOpen}
                     onClose={handleChange}
                     title="Edit Product"
-                    primaryAction={{
-                        content: "Save",
-                        onAction: handleChange,
-                    }}
-                    secondaryActions={[
-                        {
-                            content: "Cancel",
-                            onAction: handleChange,
-                        },
-                    ]}
                 >
                     <Modal.Section>
-                        <Form>
+                        <Form onSubmit={handleFormEditProduct}>
                             <FormLayout>
                                 <TextField
-                                    value={productEdit.data.title}
+                                    value={title}
                                     label="Title"
                                     placeholder="Enter Title here"
                                     onChange={handleChangeTitle}
                                 />
                                 <TextField
-                                    value={productEdit.data.description}
+                                    value={description}
                                     label="Description"
                                     placeholder="Enter Description here"
                                     onChange={handleChangeDescription}
                                 />
                                 <TextField
                                     type="number"
-                                    value={productEdit.data.price}
+                                    value={price}
                                     label="Price"
                                     placeholder="Enter Price here"
                                     onChange={handleChangePrice}
                                 />
-
                                 <Select
                                     label="Choose Brand"
                                     options={options}
                                     onChange={handleChangeBrand}
-                                    value={productEdit.data.Brand.name}
+                                    value={brandId}
                                 />
 
-                                <UploadFileds />
+                                <UploadFileds uploadFiles={setImages} />
+                                <ButtonGroup>
+                                    <Button>Cancel</Button>
+                                    <Button
+                                        primary
+                                        submit
+                                        onClick={handleChange}
+                                    >
+                                        Submit
+                                    </Button>
+                                </ButtonGroup>
                             </FormLayout>
                         </Form>
                     </Modal.Section>
@@ -166,23 +182,17 @@ const ModalForm = ({
 
             {productCreate?.mode === "create" && (
                 <Modal
-                    // activator={activator}
                     open={isOpen}
                     onClose={handleChange}
                     title="Create Product"
-                    // primaryAction={{
-                    //     content: "Save",
-                    //     onAction: handleChange,
-                    // }}
-                    // secondaryActions={[
-                    //     {
-                    //         content: "Cancel",
-                    //         onAction: handleChange,
-                    //     },
-                    // ]}
                 >
                     <Modal.Section>
-                        <Form onSubmit={handleSubmitForm}>
+                        <Form
+                            encType="multipart/form-data"
+                            method="POSt"
+                            name="formCreate"
+                            onSubmit={handleSubmitForm}
+                        >
                             <FormLayout>
                                 <TextField
                                     value={title}
@@ -213,10 +223,15 @@ const ModalForm = ({
                                     value={brandId}
                                 />
 
-                                <UploadFileds images={setFiles} />
+                                <UploadFileds uploadFiles={setImages} />
                                 <ButtonGroup>
                                     <Button>Cancel</Button>
-                                    <Button submit primary>
+
+                                    <Button
+                                        primary
+                                        submit
+                                        onClick={handleChange}
+                                    >
                                         Submit
                                     </Button>
                                 </ButtonGroup>

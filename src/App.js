@@ -35,7 +35,7 @@ const App = () => {
     });
     const skipToContentRef = useRef(null);
 
-    const [toastActive, setToastActive] = useState(false);
+    // const [toastActive, setToastActive] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
     const [searchActive, setSearchActive] = useState(false);
@@ -73,7 +73,7 @@ const App = () => {
         defaultState.current.emailFieldValue = emailFieldValue;
 
         setIsDirty(false);
-        setToastActive(true);
+        // setToastActive(true);
         setStoreName(defaultState.current.nameFieldValue);
     }, [emailFieldValue, nameFieldValue]);
     const handleNameFieldChange = useCallback((value) => {
@@ -92,10 +92,10 @@ const App = () => {
         setSearchValue(value);
         setSearchActive(value.length > 0);
     }, []);
-    const toggleToastActive = useCallback(
-        () => setToastActive((toastActive) => !toastActive),
-        []
-    );
+    // const toggleToastActive = useCallback(
+    //     () => setToastActive((toastActive) => !toastActive),
+    //     []
+    // );
     const toggleUserMenuActive = useCallback(
         () => setUserMenuActive((userMenuActive) => !userMenuActive),
         []
@@ -117,7 +117,7 @@ const App = () => {
     );
 
     // const toastMarkup = toastActive ? (
-    //   <Toast onDismiss={toggleToastActive} content="Changes saved" />
+    //     <Toast onDismiss={toggleToastActive} content="Changes saved" />
     // ) : null;
 
     const userMenuActions = [
@@ -205,7 +205,7 @@ const App = () => {
         </Navigation>
     );
 
-    // const loadingMarkup = isLoading ? <Loading /> : null;
+    const loadingMarkup = isLoading ? <Loading /> : null;
 
     const skipToContentTarget = (
         <a id="SkipToContentTarget" ref={skipToContentRef} tabIndex={-1} />
@@ -256,37 +256,37 @@ const App = () => {
         </SkeletonPage>
     );
 
-    // const pageMarkup = isLoading ? loadingPageMarkup : actualPageMarkup;
+    const pageMarkup = isLoading ? loadingPageMarkup : actualPageMarkup;
 
-    // const modalMarkup = (
-    //   <Modal
-    //     open={modalActive}
-    //     onClose={toggleModalActive}
-    //     title="Contact support"
-    //     primaryAction={{
-    //       content: "Send",
-    //       onAction: toggleModalActive,
-    //     }}
-    //   >
-    //     <Modal.Section>
-    //       <FormLayout>
-    //         <TextField
-    //           label="Subject"
-    //           value={supportSubject}
-    //           onChange={handleSubjectChange}
-    //           autoComplete="off"
-    //         />
-    //         <TextField
-    //           label="Message"
-    //           value={supportMessage}
-    //           onChange={handleMessageChange}
-    //           autoComplete="off"
-    //           multiline
-    //         />
-    //       </FormLayout>
-    //     </Modal.Section>
-    //   </Modal>
-    // );
+    const modalMarkup = (
+        <Modal
+            open={modalActive}
+            onClose={toggleModalActive}
+            title="Contact support"
+            primaryAction={{
+                content: "Send",
+                onAction: toggleModalActive,
+            }}
+        >
+            <Modal.Section>
+                <FormLayout>
+                    <TextField
+                        label="Subject"
+                        value={supportSubject}
+                        onChange={handleSubjectChange}
+                        autoComplete="off"
+                    />
+                    <TextField
+                        label="Message"
+                        value={supportMessage}
+                        onChange={handleMessageChange}
+                        autoComplete="off"
+                        multiline
+                    />
+                </FormLayout>
+            </Modal.Section>
+        </Modal>
+    );
 
     const logo = {
         width: 124,

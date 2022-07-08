@@ -11,7 +11,15 @@ import { DeleteMajor, EditMajor } from "@shopify/polaris-icons";
 import React from "react";
 import ModalForm from "../modal/Modal";
 
-const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
+const ProductItem = ({
+    isOpen,
+    setIsOpen,
+    products,
+    mode,
+    setMode,
+    onDelete,
+    onEdit,
+}) => {
     const resourceName = {
         singular: "product",
         plural: "products",
@@ -44,13 +52,11 @@ const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
         return (
             <IndexTable.Row
                 id={product.id}
-                key={index}
+                key={product.id}
                 selected={selectedResources.includes(product.id)}
                 position={index}
             >
-                <IndexTable.Cell>
-                    <TextStyle variation="strong">{product.id}</TextStyle>
-                </IndexTable.Cell>
+                <IndexTable.Cell>{product.id}</IndexTable.Cell>
                 <IndexTable.Cell>
                     <img
                         style={{
@@ -74,12 +80,15 @@ const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
                                 external
                                 onClick={() => openModalEdit(product)}
                             ></Button>
-                            <Button
-                                primary
-                                icon={DeleteMajor}
-                                external
-                                onClick={() => openModalDelete(product)}
-                            ></Button>
+                            <div style={{ color: "#bf0711" }}>
+                                <Button
+                                    onClick={() => openModalDelete(product)}
+                                    external
+                                    icon={DeleteMajor}
+                                    monochrome
+                                    outline
+                                ></Button>
+                            </div>
                         </ButtonGroup>
                     </Stack>
                 </IndexTable.Cell>
@@ -99,7 +108,7 @@ const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
                     onSelectionChange={handleSelectionChange}
                     headings={[
                         { title: "ID" },
-                        { title: "" },
+                        { title: "Images" },
                         { title: "Title" },
                         { title: "Description" },
                         { title: "Price" },
@@ -115,6 +124,7 @@ const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     productDelete={mode}
+                    onDelete={onDelete}
                 />
             )}
             {mode.mode === "edit" && (
@@ -122,6 +132,7 @@ const ProductItem = ({ isOpen, setIsOpen, products, mode, setMode }) => {
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     productEdit={mode}
+                    onEdit={onEdit}
                 />
             )}
         </>

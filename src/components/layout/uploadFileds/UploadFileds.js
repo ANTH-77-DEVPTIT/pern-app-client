@@ -2,7 +2,7 @@ import { Caption, DropZone, Stack, Thumbnail } from "@shopify/polaris";
 import React, { useCallback, useState } from "react";
 import { NoteMinor } from "@shopify/polaris-icons";
 
-const UploadFileds = ({ images }) => {
+const UploadFileds = ({ uploadFiles }) => {
     const [files, setFiles] = useState([]);
 
     const handleDropZoneDrop = useCallback(
@@ -11,7 +11,7 @@ const UploadFileds = ({ images }) => {
         []
     );
 
-    // images(files);
+    uploadFiles(files);
 
     const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
 
@@ -46,6 +46,7 @@ const UploadFileds = ({ images }) => {
         <DropZone
             accept="image/*"
             type="images"
+            name="images"
             label="Choose Files"
             onDrop={handleDropZoneDrop}
         >
